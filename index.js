@@ -1,11 +1,27 @@
 const express = require("express");
 const { NotFoundError, ErrorHandler } = require("./utils/error-handler");
 const { blogModel } = require("./model/blog.model");
+const {
+  authValidator,
+  registerValidator,
+} = require("./validators/auth.validator");
+const { checkValidation } = require("./middleware/validator");
 require("./config/mongo.config");
 const app = express();
 const PORT = 3000;
 app.use(express.json());
 app.use(express.urlencoded());
+app.post("/login", authValidator(), checkValidation, async (req, res, next) => {
+  res.send(req.body);
+});
+app.post(
+  "/register",
+  registerValidator(),
+  checkValidation,
+  async (req, res, next) => {
+    res.send(req.body);
+  },
+);
 app.get("/blogs", async (req, res, next) => {
   const blogs = await blogModel.find();
 

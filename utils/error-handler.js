@@ -12,6 +12,7 @@ const ErrorHandler = (error, req, res, next) => {
     statusCode: error.status || 500,
     error: {
       message: error.message || `internalServerError`,
+      invalidParams: error.error,
     },
   });
 };
